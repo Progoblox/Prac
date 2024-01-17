@@ -3,15 +3,18 @@ local ss = game:GetService("ServerStorage")
 
 ----------------------------------- Configuration -----------------------------------
 
-local f = Instance.new("Folder", ss)
-f.Name = "PracGlobalConfig"
-
 local defaultSpeed = 16 -- the default speed
 local maxSpeed = 16 -- max speed you gave
 local defaultHealth = 100 -- the default health
 local maxHealth = 100 -- max health you have
 local maxDistanceCheckWallHack = 100 -- max distance you give to check when there is a possible wallhack
+local maxHeigh = 10 -- max maximum height difference -> the ground and the player's feet
+local defaultAnchored = false
 
+local maxWarningsSpeed = 3 -- max warnings for speed hack
+local maxWarningsHealth = 3 -- max warnings for health hack
+local maxWarningsNoClip = 10 -- max warnings for noclip, 10 to detect fastly and not be a possible error
+local maxWarningsFly = 3 -- max warnings for fly
 
 ----------------------------------- Functions -----------------------------------
 local function resetArgumentsHumanoidPlayer(plr, target)
@@ -19,6 +22,12 @@ local function resetArgumentsHumanoidPlayer(plr, target)
         plr.Character.Humanoid.WalkSpeed = defaultSpeed
     elseif target == "health" then
         plr.Character.Humanoid.Health = defaultHealth
+    elseif target == "fly" then
+        for i, p_char in ipairs(player.Character:GetChildren()) do
+            if p_char:IsA("MeshPart") or p_char:IsA("Part") then
+                p_char.Anchored = defaultAnchored
+            end
+        end
     end
 end
 
@@ -54,7 +63,7 @@ local function aimingAtPlayerFunction(player, targetPlayer)
         local direction = (targetHRP.Position - playerHRP.Position).unit
         local ray = Ray.new(playerHRP.Position, direction * maxDistanceCheckWallHack)
         local hitPart, hitPosition = workspace:FindPartOnRay(ray, player)
-        if hitPart and hitPart:IsA("Humanoid") and hitPart.Parent == targetPlayer.Character then
+        if hitPart and hitPart:IsA("Humanoid") and hitPart.Parent == targetPlayer.Character and not player.PracConfig.isModerator.Value then
             return true
         end
     end
@@ -62,26 +71,64 @@ local function aimingAtPlayerFunction(player, targetPlayer)
 end)
 aimingAtPlayer.OnServerInvoke = aimingAtPlayerFunction
 
+-- NoClip
+local isNoClip = rs.isNoClip -- RF
+local function isNoClipFunction(player, clientChar)
+    for i, p_char in ipairs(player.Character:GetChildren()) do
+        if p_char:IsA("MeshPart") or p_char:IsA("Part") then
+            local p_client = clientChar:FindFirstChild(p_clientChar.Name)
+            if p_client and p_clientChar.CanCollide != p_current.CanCollide and not player.PracConfig.isModerator.Value then
+                return true
+            end
+        end
+    end
+    return false
+end
+isNoClip.OnServerInvoke = isNoClipFunction
+
+-- Fly
+local isFlying = rs.isFlying
+local function isFlyingFunction(player, clientChar)
+    for i, p_char in ipairs(player.Character:GetChildren()) do
+        if p_char:IsA("MeshPart") or p_char:IsA("Part") then
+            local p_client = clientChar:FindFirstChild(p_clientChar.Name)
+            if p_client and p_clientChar.Anchored != p_current.Anchored and not player.PracConfig.isModerator.Value then
+                resetArgumentsHumanoidPlayer(player, "fly")
+                return true
+            end
+        end
+    end
+    return false
+end
+isFlying.OnServerInvoke = isFlyingFunction
 
 
 -- Utilities for management
 
 local warnings = rs.warnings -- RE
 warnings.OnServerEvent:Connect(function(player, source)
-    v = 0
-    r = ""
-    if source == "speed" then
+    if source == "1" then -- Speed Hack
         player.PracConfig.warningSpeed.Value = player.PracConfig.warningSpeed.Value + 1
-        v = player.PracConfig.warningSpeed.Value
-        r = "Possible Speed Hack"
-    elseif source == "health" then
+        if player.PracConfig.warningSpeed.Value >= maxWarningsSpeed then
+            player:kick("[PRAC] Possible Speed Hack")
+        end
+    elseif source == "2" then -- Health Hack
         player.PracConfig.warningHealth.Value = player.PracConfig.warningHealth.Value + 1
-        v = player.PracConfig.warningHealth.Value
-        r = "Possible Health Hack"
-    end
-
-    if v >= 3 then
-        player:kick(r)
+        if player.PracConfig.warningHealth.Value >= maxWarningsHealth then
+            player:kick("[PRAC] Possible Health Hack")
+        end
+    elseif source == "3" then -- NoClip
+        player.PracConfig.warningNoClip.Value = player.PracConfig.warningNoClip.Value + 1
+        if player.PracConfig.warningNoClip.Value >= maxWarningsNoClip then
+            player:kick("[PRAC] Possible NoClip")
+        end
+    elseif source == "4" then -- NoClip
+        player.PracConfig.warningFly.Value = player.PracConfig.warningFly.Value + 1
+        if player.PracConfig.warningFly.Value >= maxWarningsFly then
+            player:kick("[PRAC] Possible Fly")
+        end
+    else
+        player:kick("[PRAC] Possible Script Modification")
     end
 end)
 
