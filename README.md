@@ -34,3 +34,7 @@ Create RF in ReplicatedStorage :
 Create RE in ReplicatedStorage :
 - `kick`
 - `warnings`
+
+# Links
+
+[Forum Link](https://devforum.roblox.com/t/prac-little-anti-cheat/2796942)
