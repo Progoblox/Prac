@@ -16,7 +16,11 @@ game:GetService("Players").PlayerAdded:Connect(function(player)
     warningHealth.Name = "warningHealth"
     warningHealth.Value = 0
 
-    local warningWallhack = Instance.new("IntValue", f)
-    warningWallhack.Name = "warningWallhack"
-    warningWallhack.Value = 0
+    local warningNoClip = Instance.new("IntValue", f)
+    warningNoClip.Name = "warningNoClip"
+    warningNoClip.Value = 0
+
+    local warningFly = Instance.new("IntValue", f)
+    warningFly.Name = "warningFly"
+    warningFly.Value = 0
 end)
