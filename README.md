@@ -7,8 +7,6 @@ Prac offers a configurable setup, allowing administrators to selectively disable
 
 # Configuration
 
-If a player in your game is a moderator, you have values to disable the verifications on the players you want.
-
 - `config.lua` configuration for a player (server side)
 - `manager.lua` global configuration, actions from RE & RF (server side)
 - `checker_speed-health.lua` checker for speed & health hack (client side)
