@@ -35,39 +35,30 @@ maxHealth.Value = v_maxHealth
 ----------------------------------- Remote Functions -----------------------------------
 -- Is Moderator
 local plrIsModerator = rs.plrIsModerator
-
 local function plrIsModeratorFunction(player)
     return plr.PracConfig.isModerator.Value
 end
 plrIsModerator.OnServerInvoke = plrIsModeratorFunction
 
--- Speed
-local getDefaultSpeed = rs.getMinSpeed
-local getMaxSpeed = rs.getMinSpeed
-
-local function getDefaultSpeedFunction(player)
-    return ss:FindFirstChild("PracGlobalConfig"):FindFirstChild("defaultSpeed").Value
+-- SpeedHack
+local isSpeedHack = rs.isSpeedHack
+local function isSpeedHackFunction(player, current)
+    if not player.PracConfig.isModerator.Value and current > ss:FindFirstChild(f.name).maxSpeed.Value then
+       return true
+    end
+    return false
 end
-getDefaultSpeed.OnServerInvoke = getDefaultSpeedFunction
+isSpeedHack.OnServerInvoke = isSpeedHackFunction
 
-local function getMaxSpeedFunction(player)
-    return ss:FindFirstChild("PracGlobalConfig"):FindFirstChild("maxSpeed").Value
+-- HealthHack
+local isHealthHack = rs.isHealthHack
+local function isHealthHackFunction(player, current)
+    if not player.PracConfig.isModerator.Value and current > ss:FindFirstChild(f.name).maxHealth.Value then
+        return true
+    end
+    return false
 end
-getMaxSpeed.OnServerInvoke = getMaxSpeedFunction
-
--- Health
-local getDefaultSpeed = rs.getMinSpeed
-local getMaxSpeed = rs.getMinSpeed
-
-local function getDefaultSpeedFunction(player)
-    return ss:FindFirstChild("PracGlobalConfig"):FindFirstChild("defaultSpeed").Value
-end
-getDefaultSpeed.OnServerInvoke = getDefaultSpeedFunction
-
-local function getMaxSpeedFunction(player)
-    return ss:FindFirstChild("PracGlobalConfig"):FindFirstChild("maxSpeed").Value
-end
-getMaxSpeed.OnServerInvoke = getMaxSpeedFunction
+isHealthHack.OnServerInvoke = isHealthHackFunction
 
 ----------------------------------- Remote Events -----------------------------------
 
