@@ -1,7 +1,9 @@
 # Description
 
-Prac is an anti-cheat created by Program, the goal is to detect cheaters and check if players are using some clients.
-You can add a configuration to disable Prac on some players, like on Moderators or you (if you're flying for example).
+Prac is an anti-cheat system developed by Program with the primary objective of identifying and preventing cheating activities on Roblox games.
+Its purpose is to detect the usage of unauthorized clients and ensure fair gameplay.
+Prac offers a configurable setup, allowing administrators to selectively disable its features for specific players, such as moderators or individuals with special permissions
+(e.g., those utilizing flight capabilities).
 
 # Configuration
 
