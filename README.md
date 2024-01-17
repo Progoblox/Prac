@@ -11,27 +11,27 @@ About speed, health and wallhack, the program give 3 warnings to the player data
 
 - `config.lua` configuration for a player (server side)
 - `manager.lua` global configuration, actions from RE & RF (server side)
-
-- `checker_speed-health.lua` checker for speed & health hack (client side)
-- `checker_wallhack.lua` checker for WallHack (client side)
+- `checker.lua` checker for hacks (client side)
 
 # Detection
 
 - Speedhack
 - HealthHack
 - Fly (WIP)
-- Wallhack (WIP)
-- Aimbot (WIP)
+- NoClip
+- Wallhack
 
 # Installation
 
 Place scripts:
 - `config.lua`, `manager.lua` in ServerScriptService
-- `checker_speed-health.lua`, `checker_wallhack.lua` in StarterPlayer
+- `checker.lua` in StarterPlayer
 
 Create RF in ReplicatedStorage :
 - `isSpeedHack`
 - `isHealthHack`
+- `aimingAtPlayer`
+- `isNoClip`
 
 Create RE in ReplicatedStorage :
 - `kick`
