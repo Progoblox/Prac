@@ -13,8 +13,8 @@ local defaultAnchored = false
 
 local maxWarningsSpeed = 3 -- max warnings for speed hack
 local maxWarningsHealth = 3 -- max warnings for health hack
-local maxWarningsNoClip = 10 -- max warnings for noclip, 10 to detect fastly and not be a possible error
-local maxWarningsFly = 3 -- max warnings for fly
+local maxWarningsNoClip = 30 -- max warnings for noclip (1 warning for 1 part)
+local maxWarningsFly = 18 -- max warnings for fly (1 warning for 1 part)
 
 ----------------------------------- Functions -----------------------------------
 local function resetArgumentsHumanoidPlayer(plr, target)
@@ -74,13 +74,10 @@ aimingAtPlayer.OnServerInvoke = aimingAtPlayerFunction
 
 -- NoClip
 local isNoClip = rs.isNoClip -- RF
-local function isNoClipFunction(player, clientChar)
+local function isNoClipFunction(player, clientState)
 	for i, p_char in ipairs(player.Character:GetChildren()) do
-		if p_char:IsA("MeshPart") or p_char:IsA("Part") then
-			local p_client = clientChar:FindFirstChild(p_char.Name)
-			if p_client and p_client.CanCollide ~= p_char.CanCollide and not player.PracConfig.isModerator.Value then
-				return true
-			end
+		if ( p_char:IsA("MeshPart") or p_char:IsA("Part") ) and p_char.CanCollide ~= clientState and not player.PracConfig.isModerator.Value then
+			return true
 		end
 	end
 	return false
@@ -89,14 +86,10 @@ isNoClip.OnServerInvoke = isNoClipFunction
 
 -- Fly
 local isFlying = rs.isFlying -- RF
-local function isFlyingFunction(player, clientChar)
+local function isFlyingFunction(player, clientState)
 	for i, p_char in ipairs(player.Character:GetChildren()) do
-		if p_char:IsA("MeshPart") or p_char:IsA("Part") then
-			local p_client = clientChar:FindFirstChild(p_char.Name)
-			if p_client and p_client.Anchored ~= p_char.Anchored and not player.PracConfig.isModerator.Value then
-				resetArgumentsHumanoidPlayer(player, "fly")
-				return true
-			end
+		if ( p_char:IsA("MeshPart") or p_char:IsA("Part") ) and p_char.Anchored ~= clientState and not player.PracConfig.isModerator.Value then
+			return true
 		end
 	end
 	return false
