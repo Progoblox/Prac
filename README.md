@@ -13,8 +13,8 @@ If a player in your game is a moderator, you have values to disable the verifica
 
 # Detection
 
-- Speedhack (WIP)
-- HealthHack (WIP)
+- Speedhack
+- HealthHack
 - Fly (WIP)
 - Wallhack (WIP)
 - Aimbot (WIP)
@@ -28,10 +28,8 @@ Place scripts:
 
 Create RF in ReplicatedStorage :
 - `plrIsModerator`
-- `getDefaultSpeed`
-- `getMaxSpeed`
-- `getDefaultHealth`
-- `getMaxHealth`
+- `isSpeedHack`
+- `isHealthHack`
 
 Create RE in ReplicatedStorage :
  - `kick`
