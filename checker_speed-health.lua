@@ -5,12 +5,12 @@ local humanoid = char:FindFirstChild("Humanoid")
 
 humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function(onWalkSpeedChanged)
     if rs.isSpeedHack:InvokeServer(humanoid.WalkSpeed) then
-        rs.kick:FireServer("Possible Speed Hack")
+        rs.warnings:FireServer("speed")
     end
 end)
 
 humanoid:GetPropertyChangedSignal("Health"):Connect(function(onWalkSpeedChanged)
-    if rs.isSpeedHack:InvokeServer(humanoid.Health) then
-        rs.kick:FireServer("Possible Health Hack")
+    if rs.isHealthHack:InvokeServer(humanoid.Health) then
+        rs.warnings:FireServer("health")
     end
 end)
