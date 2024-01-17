@@ -5,9 +5,9 @@ local char = plr.Character or plr.CharacterAdded:Wait()
 local humanoid = char:FindFirstChild("Humanoid")
 
 humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function(onWalkSpeedChanged)
-    if rs.isSpeedHack:InvokeServer(humanoid.WalkSpeed) then
-        rs.warnings:FireServer("1")
-    end
+	if rs.isSpeedHack:InvokeServer(humanoid.WalkSpeed) then
+		rs.warnings:FireServer("1")
+	end
 end)
 
 humanoid:GetPropertyChangedSignal("Health"):Connect(function(onWalkSpeedChanged)

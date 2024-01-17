@@ -30,6 +30,7 @@ Create RF in ReplicatedStorage :
 - `isHealthHack`
 - `aimingAtPlayer`
 - `isNoClip`
+- `isFlying`
 
 Create RE in ReplicatedStorage :
 - `kick`
