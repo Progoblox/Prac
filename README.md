@@ -5,6 +5,8 @@ Its purpose is to detect the usage of unauthorized clients and ensure fair gamep
 Prac offers a configurable setup, allowing administrators to selectively disable its features for specific players, such as moderators or individuals with special permissions
 (e.g., those utilizing flight capabilities).
 
+About speed, health and wallhack, the program give 3 warnings to the player data, once the player get 3 warnings, he is kicked from the server.
+
 # Configuration
 
 - `config.lua` configuration for a player (server side)
@@ -27,7 +29,6 @@ Place scripts:
 - `checker_speed-health.lua` in StarterPlayer
 
 Create RF in ReplicatedStorage :
-- `plrIsModerator`
 - `isSpeedHack`
 - `isHealthHack`
 
