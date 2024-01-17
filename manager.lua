@@ -6,64 +6,63 @@ local ss = game:GetService("ServerStorage")
 local f = Instance.new("Folder", ss)
 f.Name = "PracGlobalConfig"
 
--- Configuration global values
+local defaultSpeed = 16 -- the default speed
+local maxSpeed = 16 -- max speed you gave
+local defaultHealth = 100 -- the default health
+local maxHealth = 100 -- max health you have
 
-local v_defaultSpeed = 16 -- the default speed
-local v_maxSpeed = 16 -- max speed you gave
-local v_defaultHealth = 100 -- the default health
-local v_maxHealth = 100 -- max health you have
-
--- Saving in a folder
-
-local defaultSpeed = Instance.new("NumberValue", f)
-defaultSpeed.Name = "defaultSpeed"
-defaultSpeed.Value = v_defaultSpeed
-
-local maxSpeed = Instance.new("NumberValue", f)
-maxSpeed.Name = "maxSpeed"
-maxSpeed.Value = v_maxSpeed
-
-local defaultHealth = Instance.new("NumberValue", f)
-defaultHealth.Name = "defaultHealth"
-defaultHealth.Value = v_defaultHealth
-
-local maxHealth = Instance.new("NumberValue", f)
-maxHealth.Name = "maxHealth"
-maxHealth.Value = v_maxHealth
-
-
------------------------------------ Remote Functions -----------------------------------
--- Is Moderator
-local plrIsModerator = rs.plrIsModerator
-local function plrIsModeratorFunction(player)
-    return plr.PracConfig.isModerator.Value
+----------------------------------- Functions -----------------------------------
+local function resetArgumentsHumanoidPlayer(plr, target)
+    if target == "speed" then
+        plr.Character.Humanoid.WalkSpeed = defaultSpeed
+    elseif target == "health" then
+        plr.Character.Humanoid.Health = defaultHealth
+    end
 end
-plrIsModerator.OnServerInvoke = plrIsModeratorFunction
 
 -- SpeedHack
-local isSpeedHack = rs.isSpeedHack
+local isSpeedHack = rs.isSpeedHack -- RF
 local function isSpeedHackFunction(player, current)
-    if not player.PracConfig.isModerator.Value and current > ss:FindFirstChild(f.name).maxSpeed.Value then
-       return true
+    if not player.PracConfig.isModerator.Value and current > maxSpeed then
+        resetArgumentsHumanoidPlayer(player, "speed")
+        return true
     end
     return false
 end
 isSpeedHack.OnServerInvoke = isSpeedHackFunction
 
 -- HealthHack
-local isHealthHack = rs.isHealthHack
+local isHealthHack = rs.isHealthHack -- RF
 local function isHealthHackFunction(player, current)
-    if not player.PracConfig.isModerator.Value and current > ss:FindFirstChild(f.name).maxHealth.Value then
+    if not player.PracConfig.isModerator.Value and current > maxHealth then
+        resetArgumentsHumanoidPlayer(player, "health")
         return true
     end
     return false
 end
 isHealthHack.OnServerInvoke = isHealthHackFunction
 
------------------------------------ Remote Events -----------------------------------
+local warnings = rs.warnings -- RE
+warnings.OnServerEvent:Connect(function(player, source)
+    v = 0
+    r = ""
+    
+    if source == "speed" then
+        player.PracConfig.warningSpeed.Value += 1
+        v = player.PracConfig.warningSpeed.Value
+        r = "Possible Speed Hack"
+    elseif source == "health" then
+        player.PracConfig.warningHealth.Value += 1
+        v = player.PracConfig.warningHealth.Value
+        r = "Possible Health Hack"
+    end
 
-local kick = rs.kick
+    if v >= 3 then
+        player:kick(r)
+    end
+end)
 
+local kick = rs.kick -- RE
 kick.OnServerEvent:Connect(function(player, reason)
     player:kick(reason)
 end)
